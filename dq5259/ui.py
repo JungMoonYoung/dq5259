@@ -210,8 +210,9 @@ PRODUCT_CSS = """
 
 def product_hero(version):
     feats = ["균형", "다양성", "식별가능성", "라벨 일관성", "유사성", "완전성"]
-    stats = [("14", "ISO/IEC 5259-2 측정값"), ("6.3.9", "5259-3 확인 검토 절차"),
-             ("16,000", "장 실데이터 검증 (이미지)"), ("332만", "건 실데이터 검증 (발화)")]
+    # 진단 결과가 아니라 제품 스펙(구현 범위·준수 조항·검증에 쓴 데이터 규모)
+    stats = [("14개", "구현 측정값 · ISO/IEC 5259-2"), ("6.3.9", "준수 절차 · ISO/IEC 5259-3"),
+             ("16,000장", "검증 데이터 · AI Hub 이미지"), ("332만 건", "검증 데이터 · AI Hub 발화")]
     return (f'<div class="pq"><div class="pq-bar"><div class="pq-brand">{LOGO_SVG}'
             f'<div class="pq-name">DQ-5259<small>AI DATA QUALITY EVALUATOR</small></div>'
             f'<span class="pq-ver">v{esc(version)}</span></div>'
