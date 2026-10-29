@@ -217,8 +217,7 @@ def product_hero(version):
             f'<span class="pq-ver">v{esc(version)}</span></div>'
             f'<span class="pq-std">ISO/IEC 5259 기반</span></div>'
             f'<div class="pq-main"><div><h1>AI 학습데이터,<br><em>표준으로 진단</em>합니다</h1>'
-            f'<p>균형·식별가능성·라벨 일관성을 표준 측정값으로 정량 평가하고, '
-            f'기준값 판정부터 시험성적서 형식 보고서까지 한 번에 생성합니다.</p></div>'
+            f'<p>표준 기반 학습 데이터 진단 프로그램</p></div>'
             f'<div class="pq-stats">' + "".join(f'<div class="pq-stat"><b>{esc(n)}</b><span>{esc(t)}</span></div>'
                                                 for n, t in stats) + '</div></div>'
             f'<div class="pq-feats">' + "".join(f'<span class="pq-feat"><i>●</i>{esc(f)}</span>' for f in feats)
