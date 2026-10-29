@@ -20,9 +20,9 @@ DEFAULT_MEASURES = {
     "Bal-ML-7": {"enabled": True, "threshold": 0.1, "direction": "max"},
     "Div-ML-3": {"enabled": True, "threshold": 0.2, "direction": "max", "min_count": 10},
     "Idn-ML-1": {"enabled": True, "threshold": 0.0, "direction": "max", "k": 5},
-    "Sim-ML-1": {"enabled": True, "threshold": None, "direction": "info", "hamming": 6},
+    "Sim-ML-1": {"enabled": True, "threshold": None, "direction": "info", "hamming": 24},
     # 2차 구현
-    "Con-ML-2": {"enabled": True, "threshold": 0.9, "direction": "min", "hamming": 6},
+    "Con-ML-2": {"enabled": True, "threshold": 0.9, "direction": "min", "hamming": 24},
     "Sim-ML-3": {"enabled": True, "threshold": None, "direction": "info", "variance": 0.95},
     # 카메라별 해상도가 원래 다른 데이터도 있어 정보 제공으로 둔다
     "Bal-ML-2": {"enabled": True, "threshold": None, "direction": "info"},

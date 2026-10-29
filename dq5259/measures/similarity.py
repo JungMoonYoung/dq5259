@@ -4,7 +4,7 @@
 비고 7 "샘플 수와 클러스터 수가 같으면 0(어떤 샘플도 유사하지 않음)"에 맞춰
 X = 1 - B/A 로 구현한다 (값이 클수록 비슷한 샘플이 몰려 있음).
 
-클러스터링: 이미지 dHash(64비트) 해밍 거리 ≤ h 인 샘플을 같은 군집으로 묶는다 (Union-Find).
+클러스터링: 이미지 dHash(16×16, 256비트) 해밍 거리 ≤ h 인 샘플을 같은 군집으로 묶는다 (Union-Find).
 """
 
 from collections import defaultdict
@@ -12,6 +12,21 @@ from collections import defaultdict
 import numpy as np
 
 from . import QMResult, not_applicable, register
+
+
+def similar_pairs(hashes, hamming, chunk=256):
+    """dHash(bytes) 해밍 거리 ≤ hamming 인 (i, j) 쌍 (i < j). 1만 장 이상도 처리하도록 numpy로 블록 계산."""
+    if not hashes:
+        return []
+    h = np.frombuffer(b"".join(hashes), dtype=np.uint8).reshape(len(hashes), -1)
+    pairs = []
+    for start in range(0, len(h), chunk):
+        dist = np.bitwise_count(h[start:start + chunk, None, :] ^ h[None, :, :]).sum(axis=-1)
+        ii, jj = np.nonzero(dist <= hamming)
+        ii = ii + start
+        keep = jj > ii
+        pairs.extend(zip(ii[keep].tolist(), jj[keep].tolist()))
+    return pairs
 
 
 def _clusters(items, hamming):
@@ -23,10 +38,8 @@ def _clusters(items, hamming):
             i = parent[i]
         return i
 
-    for i in range(len(items)):
-        for j in range(i + 1, len(items)):
-            if bin(items[i][1] ^ items[j][1]).count("1") <= hamming:
-                parent[find(i)] = find(j)
+    for i, j in similar_pairs([h for _, h in items], hamming):
+        parent[find(i)] = find(j)
     groups = defaultdict(list)
     for i, (key, _) in enumerate(items):
         groups[find(i)].append(key)
@@ -41,7 +54,7 @@ def sample_similarity(prof, cfg, params):
              if s.source_meta and "dhash" in s.source_meta]
     if len(items) < 2:
         return not_applicable("Sim-ML-1", "이미지가 2장 미만")
-    h = params.get("hamming", 6)
+    h = params.get("hamming", 24)
     groups = _clusters(items, h)
     A, B = len(items), len(groups)
     multi = sorted((g for g in groups if len(g) > 1), key=len, reverse=True)

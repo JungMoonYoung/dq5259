@@ -24,3 +24,4 @@ fields:
 measures:
   Div-ML-3: {min_count: 10}
   Idn-ML-1: {k: 5}
+  Con-ML-2: {min_key_length: 10}   # 10자 미만 추임새·짧은 응답은 비교 제외

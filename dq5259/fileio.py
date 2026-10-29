@@ -36,25 +36,31 @@ def sha1(path):
     return h.hexdigest()
 
 
-def dhash(img, size=8):
-    """차이 해시(dHash). 비슷한 이미지는 비트가 비슷하다 — Sim-ML-1 군집화에 사용."""
+def dhash(img, size=16):
+    """차이 해시(dHash), size×size 비트를 bytes로 반환. 비슷한 이미지는 비트가 비슷하다.
+
+    8×8(64비트)은 실제 거리 사진에서 '위는 하늘, 아래는 바닥' 구도만 같아도 같은 지문이 나와
+    다른 장소 사진을 유사로 오판했다 (배송로봇 1만6천 장 실측: 다른 장소 오탐 16,838쌍).
+    16×16(256비트)·거리 ≤ 24에서는 오탐 1쌍으로 줄어 기본값으로 쓴다.
+    """
     small = img.convert("L").resize((size + 1, size), Image.Resampling.BILINEAR)
-    px = list(small.tobytes())
-    bits = 0
+    px = small.tobytes()
+    bits = bytearray(size * size // 8)
     for row in range(size):
         for col in range(size):
-            left = px[row * (size + 1) + col]
-            right = px[row * (size + 1) + col + 1]
-            bits = (bits << 1) | (left > right)
-    return bits
+            k = row * size + col
+            if px[row * (size + 1) + col] > px[row * (size + 1) + col + 1]:
+                bits[k // 8] |= 0x80 >> (k % 8)
+    return bytes(bits)
 
 
 def image_meta(path):
     """실제 해상도·평균 밝기·dHash·8x8 썸네일(PCA 특징). 실패 시 (None, 사유)."""
     try:
         with Image.open(path) as img:
+            width, height = img.size          # 원본 해상도 (draft 전에 기록)
+            img.draft("RGB", (256, 256))      # JPEG은 축소 디코딩 — 1만 장 이상도 빠르게
             img.load()
-            width, height = img.size
             gray = img.convert("L")
             gray.thumbnail((128, 128))
             px = list(gray.tobytes())

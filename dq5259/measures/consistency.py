@@ -5,18 +5,23 @@ X = A/B
   B: 유사한 항목 라벨 간에 수행된 총 비교 횟수
 
 '유사한 항목'의 판단 (표준은 방법을 정하지 않으므로 데이터 유형별로 정의)
-  - 단위 항목 모드: fields.similar_key 값이 같은 항목 (예: 같은 문장의 발화)
+  - 단위 항목 모드: fields.similar_key 값이 같은 항목 (예: 같은 문장의 발화).
+    min_key_length 미만의 짧은 추임새는 맥락에 따라 감정이 달라지는 것이 정상이라 제외한다
   - 이미지 모드: dHash 해밍 거리 ≤ h 인 이미지 쌍, 라벨은 이미지의 범주 집합
 """
 
+import re
 from collections import Counter, defaultdict
 from math import comb
 
 from .. import jsonpath
 from . import QMResult, not_applicable, register
+from .similarity import similar_pairs
+
+PUNCT = re.compile(r"[.,!?~…·\"'()\[\]]")
 
 
-def _unit_mode(prof, cfg):
+def _unit_mode(prof, cfg, min_len):
     f = cfg["fields"]
     groups = defaultdict(list)  # 정규화한 키 -> [(샘플, 라벨)]
     for s in prof.labeled:
@@ -27,7 +32,10 @@ def _unit_mode(prof, cfg):
             lab = jsonpath.get(item, f["unit_label"])[0]
             if jsonpath.is_null(key) or jsonpath.is_null(lab):
                 continue
-            groups[" ".join(str(key).split())].append((s.key, str(lab)))
+            norm = " ".join(PUNCT.sub(" ", str(key)).split())  # 문장부호 차이는 같은 문장으로 본다
+            if len(norm.replace(" ", "")) < min_len:  # '음', '네' 같은 추임새는 맥락마다 감정이 달라 비교 제외
+                continue
+            groups[norm].append((s.key, str(lab)))
     A = B = 0
     defects = []
     for key, items in groups.items():
@@ -40,7 +48,7 @@ def _unit_mode(prof, cfg):
             defects.append({"key": key[:40], "items": len(items), "labels": dict(labels),
                             "samples": ", ".join(dict.fromkeys(k for k, _ in items))[:80],
                             "reason": f"같은 '{f['similar_key']}' {len(items)}건에 라벨 {len(labels)}종"})
-    return A, B, defects, f"유사 기준: '{f['similar_key']}' 값이 같은 항목"
+    return A, B, defects, f"유사 기준: '{f['similar_key']}' 값이 같은 항목 (공백 제외 {min_len}자 이상)"
 
 
 def _image_mode(prof, cfg, h):
@@ -52,18 +60,15 @@ def _image_mode(prof, cfg, h):
             items.append((s.key, s.source_meta["dhash"], cats))
     A = B = 0
     defects = []
-    for i in range(len(items)):
-        for j in range(i + 1, len(items)):
-            if bin(items[i][1] ^ items[j][1]).count("1") > h:
-                continue
-            B += 1
-            if items[i][2] == items[j][2]:
-                A += 1
-            else:
-                only_a, only_b = items[i][2] - items[j][2], items[j][2] - items[i][2]
-                defects.append({"sample_a": items[i][0], "sample_b": items[j][0],
-                                "only_a": ", ".join(sorted(only_a)) or "-", "only_b": ", ".join(sorted(only_b)) or "-",
-                                "reason": "유사 이미지인데 범주 구성이 다름"})
+    for i, j in similar_pairs([it[1] for it in items], h):
+        B += 1
+        if items[i][2] == items[j][2]:
+            A += 1
+        else:
+            only_a, only_b = items[i][2] - items[j][2], items[j][2] - items[i][2]
+            defects.append({"sample_a": items[i][0], "sample_b": items[j][0],
+                            "only_a": ", ".join(sorted(only_a)) or "-", "only_b": ", ".join(sorted(only_b)) or "-",
+                            "reason": "유사 이미지인데 범주 구성이 다름"})
     return A, B, defects, f"유사 기준: dHash 해밍 거리 ≤ {h}, 라벨 = 이미지의 범주 집합"
 
 
@@ -72,9 +77,9 @@ def _image_mode(prof, cfg, h):
 def label_consistency(prof, cfg, params):
     f = cfg["fields"]
     if f["similar_key"] and f["unit_items"] and f["unit_label"]:
-        A, B, defects, note = _unit_mode(prof, cfg)
+        A, B, defects, note = _unit_mode(prof, cfg, params.get("min_key_length", 1))
     elif cfg["dataset"]["type"] == "image" and f["categories"]:
-        A, B, defects, note = _image_mode(prof, cfg, params.get("hamming", 6))
+        A, B, defects, note = _image_mode(prof, cfg, params.get("hamming", 24))
     else:
         return not_applicable("Con-ML-2", "유사 판단 기준이 없음 (fields.similar_key 또는 이미지 범주)")
     if B == 0:

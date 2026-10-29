@@ -21,4 +21,7 @@ fields:
 
 measures:
   Div-ML-3: {min_count: 10}
-  Sim-ML-1: {hamming: 6}
+  Sim-ML-1: {hamming: 24}  # 16×16 dHash(256비트) 기준
+  # 한 장에 객체가 평균 18개인 세그멘테이션 데이터라, 유사 이미지끼리 범주 집합이 '완전히 같아야' 일치로 보는 기준은
+  # 지나치게 엄격하다 (보행자 1명만 더 찍혀도 불일치). 판정하지 않고 정보로만 제공한다.
+  Con-ML-2: {direction: info, threshold: null}

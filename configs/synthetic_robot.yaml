@@ -18,4 +18,4 @@ fields:
 measures:
   Div-ML-3: {min_count: 10}
   Idn-ML-1: {k: 5}
-  Sim-ML-1: {hamming: 6}
+  Sim-ML-1: {hamming: 24}  # 16×16 dHash(256비트) 기준
