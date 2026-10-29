@@ -1,0 +1,21 @@
+# 합성 데이터 (배송로봇 비도로 운행 데이터 라벨 구조를 본뜬 결함 주입 데이터)
+dataset:
+  name: 합성 — 배송로봇 비도로 운행 (결함 주입)
+  type: image
+  root: ../samples/robot
+  source_ext: [.jpg, .jpeg, .png]
+
+fields:
+  empty_check: annotation
+  categories: annotation[].class_type
+  required:
+    - info.time
+    - info.weather
+  unit_items: annotation[]
+  unit_label: class_type
+  unit_group: ^info.time          # 주간/야간 그룹 간 객체 범주 비율 비교
+
+measures:
+  Div-ML-3: {min_count: 10}
+  Idn-ML-1: {k: 5}
+  Sim-ML-1: {hamming: 6}

@@ -1,0 +1,24 @@
+# AI Hub — 배송로봇 비도로 운행 데이터 (본인 계정으로 내려받아 data/robot 아래에 둔다)
+dataset:
+  name: AI Hub 배송로봇 비도로 운행 데이터 (샘플)
+  type: image
+  root: ../data/robot
+  source_ext: [.jpg, .jpeg, .png]
+  label_suffix: _label            # 라벨 파일명이 <원천>_label.json 형식
+
+fields:
+  empty_check: annotation
+  categories: annotation[].class_type
+  required:
+    - annotation[].class_type
+    - info.time
+    - info.weather
+    - info.case
+  unit_items: annotation[]
+  unit_label: class_type
+  unit_group: ^info.case          # 인도/골목/공원 등 주행 환경별 객체 범주 비율 비교
+  # 사람 정보 필드가 없는 데이터 → 직접식별자 패턴만 검사
+
+measures:
+  Div-ML-3: {min_count: 10}
+  Sim-ML-1: {hamming: 6}

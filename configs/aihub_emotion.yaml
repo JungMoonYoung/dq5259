@@ -1,0 +1,25 @@
+# AI Hub — 감정이 태깅된 자유대화(성인) (본인 계정으로 내려받아 data/emotion 아래에 둔다)
+dataset:
+  name: AI Hub 감정이 태깅된 자유대화 (샘플)
+  type: audio
+  root: ../data/emotion
+  source_ext: [.wav]
+
+fields:
+  empty_check: Conversation
+  categories: Conversation[].SpeakerEmotionCategory
+  required:
+    - Speaker1.Gender
+    - Speaker1.Age
+    - Speaker2.Gender
+    - Speaker2.Age
+    - Conversation[].SpeakerEmotionCategory
+  unit_items: Conversation[]
+  unit_label: SpeakerEmotionCategory
+  unit_group: ^{SpeakerNo}.Gender
+  person_items: [Speaker1, Speaker2]
+  quasi_identifiers: [Gender, Age, Residence, Occupation]
+
+measures:
+  Div-ML-3: {min_count: 10}
+  Idn-ML-1: {k: 5}
