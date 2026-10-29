@@ -13,13 +13,14 @@ from . import QMResult, not_applicable, ratio, register
           "X = A/B  (A: 라벨이 없거나 불완전한 샘플 수, B: 전체 샘플 수)", stage="gate")
 def label_completeness(prof, cfg, params):
     empty_path = cfg["fields"]["empty_check"]
+    labels_only = cfg["dataset"].get("labels_only", False)
     defects = []
     for s in prof.samples:
         if s.label_path is None:
             reason = "원천만 있고 라벨 파일 없음"
         elif s.label is None:
             reason = f"라벨 읽기 실패: {s.label_error}"
-        elif s.source_path is None:
+        elif s.source_path is None and not labels_only:
             reason = "라벨만 있고 원천 파일 없음"
         elif empty_path and all(jsonpath.is_null(v) for v in jsonpath.get(s.label, empty_path)):
             reason = f"'{empty_path}' 비어 있음"
@@ -27,7 +28,8 @@ def label_completeness(prof, cfg, params):
             continue
         defects.append({"sample": s.key, "reason": reason})
     A, B = len(defects), len(prof.samples)
-    return QMResult("Com-ML-5", A, B, ratio(A, B), defects)
+    note = "라벨 전용 평가 — 원천 누락은 결함으로 보지 않음" if labels_only else ""
+    return QMResult("Com-ML-5", A, B, ratio(A, B), defects, note=note)
 
 
 @register("Com-ML-3", "특성 완전성", "완전성", "5259-2 6.2.2.2 표 2",

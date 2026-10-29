@@ -123,6 +123,15 @@ def test_at02_missing_root(tmp_path):
         runner.run(_cfg(tmp_path / "nope"))
 
 
+def test_at02_labels_only_mode(tmp_path):
+    for i in range(3):
+        (tmp_path / f"a{i}.json").write_text(json.dumps({"annotation": [{"class_type": "x"}]}), encoding="utf-8")
+    cfg = _cfg(tmp_path)
+    cfg["dataset"]["labels_only"] = True
+    r = {x["qm_id"]: x for x in runner.run(cfg)["results"]}
+    assert r["Com-ML-5"]["A"] == 0          # 라벨 전용 모드에서는 원천 누락이 결함 아님
+
+
 # ---------- AT-03 손상 파일 ----------
 
 def test_at03_corrupt_files(tmp_path):

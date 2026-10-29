@@ -37,6 +37,7 @@ DEFAULT_CONFIG = {
         "label_ext": [".json", ".jsonl"],
         "source_ext": [".jpg", ".jpeg", ".png"],
         "label_suffix": "",       # 라벨 파일명 끝의 접미사 (예: _label) — 쌍 매칭 시 제거
+        "labels_only": False,     # 원천 없이 라벨만으로 평가 (대용량 음성 등) — 원천 누락을 결함으로 보지 않음
     },
     "fields": {
         "empty_check": None,      # 비어 있으면 '불완전 라벨'로 보는 경로

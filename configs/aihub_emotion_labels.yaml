@@ -1,0 +1,27 @@
+# AI Hub — 감정이 태깅된 자유대화(성인), 라벨링데이터만 받은 경우 (음성 원천이 수백 GB라서)
+dataset:
+  name: AI Hub 감정이 태깅된 자유대화 (라벨 전용)
+  type: audio
+  root: ../data/emotion
+  source_ext: [.wav]
+  labels_only: true
+
+fields:
+  empty_check: Conversation
+  categories: Conversation[].SpeakerEmotionCategory
+  required:
+    - Speaker1.Gender
+    - Speaker1.Age
+    - Speaker2.Gender
+    - Speaker2.Age
+    - Conversation[].SpeakerEmotionCategory
+  unit_items: Conversation[]
+  unit_label: SpeakerEmotionCategory
+  similar_key: Text                # 같은 문장 발화끼리 감정 라벨 일관성 비교
+  unit_group: ^{SpeakerNo}.Gender
+  person_items: [Speaker1, Speaker2]
+  quasi_identifiers: [Gender, Age, Residence, Occupation]
+
+measures:
+  Div-ML-3: {min_count: 10}
+  Idn-ML-1: {k: 5}
