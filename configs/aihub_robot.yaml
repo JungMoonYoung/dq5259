@@ -1,6 +1,6 @@
 # AI Hub — 배송로봇 비도로 운행 데이터 (본인 계정으로 내려받아 data/robot 아래에 둔다)
 dataset:
-  name: AI Hub 배송로봇 비도로 운행 데이터 (샘플)
+  name: AI Hub 배송로봇 비도로 운행 데이터 (Validation 2D 실환경 16,000장)
   type: image
   root: ../data/robot
   source_ext: [.jpg, .jpeg, .png]

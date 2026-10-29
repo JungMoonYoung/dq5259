@@ -1,0 +1,863 @@
+{
+ "tool": "DQ-5259 0.1.0",
+ "run_at": "2026-10-29T12:37:14",
+ "dataset": {
+  "name": "AI Hub 감정이 태깅된 자유대화 (라벨 전용)",
+  "type": "audio",
+  "root": "AI Hub 원본 (재배포 금지로 저장소 미포함)",
+  "label_ext": [
+   ".json",
+   ".jsonl"
+  ],
+  "source_ext": [
+   ".wav"
+  ],
+  "label_suffix": "",
+  "labels_only": true
+ },
+ "config": {
+  "dataset": {
+   "name": "AI Hub 감정이 태깅된 자유대화 (라벨 전용)",
+   "type": "audio",
+   "root": "AI Hub 원본 (재배포 금지로 저장소 미포함)",
+   "label_ext": [
+    ".json",
+    ".jsonl"
+   ],
+   "source_ext": [
+    ".wav"
+   ],
+   "label_suffix": "",
+   "labels_only": true
+  },
+  "fields": {
+   "empty_check": "Conversation",
+   "categories": "Conversation[].SpeakerEmotionCategory",
+   "required": [
+    "Speaker1.Gender",
+    "Speaker1.Age",
+    "Speaker2.Gender",
+    "Speaker2.Age",
+    "Conversation[].SpeakerEmotionCategory"
+   ],
+   "unit_items": "Conversation[]",
+   "unit_label": "SpeakerEmotionCategory",
+   "unit_group": "^{SpeakerNo}.Gender",
+   "person_items": [
+    "Speaker1",
+    "Speaker2"
+   ],
+   "quasi_identifiers": [
+    "Gender",
+    "Age",
+    "Residence",
+    "Occupation"
+   ],
+   "similar_key": "Text"
+  },
+  "measures": {
+   "Com-ML-5": {
+    "enabled": true,
+    "threshold": 0.01,
+    "direction": "max"
+   },
+   "Com-ML-3": {
+    "enabled": true,
+    "threshold": 0.99,
+    "direction": "min"
+   },
+   "Con-ML-1": {
+    "enabled": true,
+    "threshold": 0.01,
+    "direction": "max"
+   },
+   "Bal-ML-3": {
+    "enabled": true,
+    "threshold": 0.5,
+    "direction": "min"
+   },
+   "Bal-ML-8": {
+    "enabled": true,
+    "threshold": 0.3,
+    "direction": "max"
+   },
+   "Bal-ML-1": {
+    "enabled": true,
+    "threshold": null,
+    "direction": "info"
+   },
+   "Bal-ML-7": {
+    "enabled": true,
+    "threshold": 0.1,
+    "direction": "max"
+   },
+   "Div-ML-3": {
+    "enabled": true,
+    "threshold": 0.2,
+    "direction": "max",
+    "min_count": 10
+   },
+   "Idn-ML-1": {
+    "enabled": true,
+    "threshold": 0.0,
+    "direction": "max",
+    "k": 5
+   },
+   "Sim-ML-1": {
+    "enabled": true,
+    "threshold": null,
+    "direction": "info",
+    "hamming": 24
+   },
+   "Con-ML-2": {
+    "enabled": true,
+    "threshold": 0.9,
+    "direction": "min",
+    "hamming": 24,
+    "min_key_length": 10
+   },
+   "Sim-ML-3": {
+    "enabled": true,
+    "threshold": null,
+    "direction": "info",
+    "variance": 0.95
+   },
+   "Bal-ML-2": {
+    "enabled": true,
+    "threshold": null,
+    "direction": "info"
+   },
+   "Div-ML-1": {
+    "enabled": true,
+    "threshold": null,
+    "direction": "info"
+   }
+  }
+ },
+ "profile": {
+  "samples": 11023,
+  "label_files": 11023,
+  "source_files": 0,
+  "paired": 0,
+  "label_only": 11023,
+  "source_only": 0,
+  "read_failures": 0
+ },
+ "failures": [],
+ "results": [
+  {
+   "qm_id": "Com-ML-5",
+   "name": "라벨 완전성",
+   "characteristic": "완전성",
+   "clause": "5259-2 6.2.2.2 표 2",
+   "formula": "X = A/B  (A: 라벨이 없거나 불완전한 샘플 수, B: 전체 샘플 수)",
+   "stage": "gate",
+   "threshold": 0.01,
+   "direction": "max",
+   "A": 13,
+   "B": 11023,
+   "value": 0.0011793522634491519,
+   "defects": [
+    {
+     "sample": "2_1442G2A3_0988G1A3_T1_2D09T0386C000000_005408",
+     "reason": "'Conversation' 비어 있음"
+    },
+    {
+     "sample": "2_1442G2A3_0988G1A3_T1_2D10T0439C000000_005416",
+     "reason": "'Conversation' 비어 있음"
+    },
+    {
+     "sample": "2_1580G2A4_1691G2A4_T1_2D06T0242C000000_006891",
+     "reason": "'Conversation' 비어 있음"
+    },
+    {
+     "sample": "2_2194G2A4_2195G2A4_T1_2D10T0430C000000_009776",
+     "reason": "'Conversation' 비어 있음"
+    },
+    {
+     "sample": "2_2194G2A4_2195G2A4_T1_2D10T0430C000000_009785",
+     "reason": "'Conversation' 비어 있음"
+    },
+    {
+     "sample": "2_2194G2A4_2195G2A4_T1_2D10T0436C000000_009125",
+     "reason": "'Conversation' 비어 있음"
+    },
+    {
+     "sample": "2_2809G2A5_2808G1A5_T1_2D08T0344C000000_012069",
+     "reason": "'Conversation' 비어 있음"
+    },
+    {
+     "sample": "2_3075G2A5_3076G2A5_T1_2D03T0124C000000_013431",
+     "reason": "'Conversation' 비어 있음"
+    },
+    {
+     "sample": "2_4463G2A3_4477G1A3_T1_2D03T0107C000000_022268",
+     "reason": "'Conversation' 비어 있음"
+    },
+    {
+     "sample": "2_4932G2A4_4931G2A4_T1_2D05T0176C000000_022359",
+     "reason": "'Conversation' 비어 있음"
+    },
+    {
+     "sample": "2_5732G2A3_5731G2A3_T1_2D11T0473C000000_025713",
+     "reason": "'Conversation' 비어 있음"
+    },
+    {
+     "sample": "2_0265G2A5_0302G2A5_T1_2D06T0240C000000_001242",
+     "reason": "'Conversation' 비어 있음"
+    },
+    {
+     "sample": "2_0004G2A2_0008G1A6_T2_2D06T0241C000000_000166",
+     "reason": "'Conversation' 비어 있음"
+    }
+   ],
+   "detail": {},
+   "note": "라벨 전용 평가 — 원천 누락은 결함으로 보지 않음",
+   "applicable": true,
+   "applied": true,
+   "verdict": "PASS"
+  },
+  {
+   "qm_id": "Com-ML-3",
+   "name": "특성 완전성",
+   "characteristic": "완전성",
+   "clause": "5259-2 6.2.2.2 표 2",
+   "formula": "X = A/B  (특성별 — A: null 아닌 항목 수, B: 해당 특성 전체 항목 수). 최솟값 특성으로 판정",
+   "stage": "gate",
+   "threshold": 0.99,
+   "direction": "min",
+   "A": 11023,
+   "B": 11023,
+   "value": 1.0,
+   "defects": [],
+   "detail": {
+    "per_feature": {
+     "Speaker1.Gender": {
+      "A": 11023,
+      "B": 11023,
+      "X": 1.0
+     },
+     "Speaker1.Age": {
+      "A": 11023,
+      "B": 11023,
+      "X": 1.0
+     },
+     "Speaker2.Gender": {
+      "A": 11023,
+      "B": 11023,
+      "X": 1.0
+     },
+     "Speaker2.Age": {
+      "A": 11023,
+      "B": 11023,
+      "X": 1.0
+     },
+     "Conversation[].SpeakerEmotionCategory": {
+      "A": 3317812,
+      "B": 3317812,
+      "X": 1.0
+     }
+    },
+    "worst": "Speaker1.Gender"
+   },
+   "note": "가장 낮은 특성: Speaker1.Gender",
+   "applicable": true,
+   "applied": true,
+   "verdict": "PASS"
+  },
+  {
+   "qm_id": "Con-ML-1",
+   "name": "데이터 레코드 일관성",
+   "characteristic": "일관성",
+   "clause": "5259-2 6.2.3.2 표 3",
+   "formula": "X = A/B  (A: 중복 레코드 수, B: 전체 레코드 수)",
+   "stage": "gate",
+   "threshold": 0.01,
+   "direction": "max",
+   "A": 0,
+   "B": 0,
+   "value": null,
+   "defects": [],
+   "detail": {},
+   "note": "",
+   "applicable": true,
+   "applied": true,
+   "verdict": "N/A"
+  },
+  {
+   "qm_id": "Bal-ML-3",
+   "name": "범주 간 균형",
+   "characteristic": "균형",
+   "clause": "5259-2 6.5.2.2 표 16",
+   "formula": "X = A/B  (A: 평균 범주 크기, B: 범주 크기와 A의 최대 절대 차이)",
+   "stage": "eval",
+   "threshold": 0.5,
+   "direction": "min",
+   "A": 1105937.3333333333,
+   "B": 940222.6666666667,
+   "value": 1.1762504484753256,
+   "defects": [
+    {
+     "category": "긍정",
+     "count": 2046160,
+     "reason": "평균(1105937.3)에서 가장 멀리 떨어진 범주"
+    }
+   ],
+   "detail": {
+    "counts": {
+     "긍정": 2046160,
+     "중립": 723960,
+     "부정": 547692
+    }
+   },
+   "note": "",
+   "applicable": true,
+   "applied": true,
+   "verdict": "PASS"
+  },
+  {
+   "qm_id": "Bal-ML-8",
+   "name": "라벨 분포 균형",
+   "characteristic": "균형",
+   "clause": "5259-2 6.5.2.2 표 16",
+   "formula": "X = f(A, B)  (A: 실제 라벨 분포, B: 균일 분포, f: Jensen-Shannon Divergence)",
+   "stage": "eval",
+   "threshold": 0.3,
+   "direction": "max",
+   "A": null,
+   "B": null,
+   "value": 0.060583486449429305,
+   "defects": [],
+   "detail": {
+    "distribution": {
+     "긍정": 0.6167196935811915,
+     "중립": 0.21820404531661228,
+     "부정": 0.16507626110219625
+    }
+   },
+   "note": "범주 3개, 항목 3317812개. 0이면 완전 균일, 1에 가까울수록 쏠림",
+   "applicable": true,
+   "applied": true,
+   "verdict": "PASS"
+  },
+  {
+   "qm_id": "Bal-ML-1",
+   "name": "밝기 균형",
+   "characteristic": "균형",
+   "clause": "5259-2 6.5.2.2 표 16",
+   "formula": "X = A/B  (A: 평균 밝기, B: 각 이미지 밝기와 A의 최대 절대 차이)",
+   "stage": "eval",
+   "threshold": null,
+   "direction": "info",
+   "applied": false,
+   "verdict": "미적용",
+   "note": "audio 데이터에 해당하지 않는 측정값",
+   "A": null,
+   "B": null,
+   "value": null,
+   "defects": [],
+   "detail": {}
+  },
+  {
+   "qm_id": "Bal-ML-7",
+   "name": "라벨 비율 균형",
+   "characteristic": "균형",
+   "clause": "5259-2 6.5.2.2 표 16",
+   "formula": "X = |A - B|  (A·B: 두 범주 그룹에서 라벨 L을 갖는 항목 비율). 모든 L·그룹 쌍 중 최댓값",
+   "stage": "eval",
+   "threshold": 0.1,
+   "direction": "max",
+   "A": 0.24825321279637877,
+   "B": 0.2101063738201253,
+   "value": 0.03814683897625348,
+   "defects": [
+    {
+     "label": "중립",
+     "group_high": "남성",
+     "rate_high": 0.248,
+     "group_low": "여성",
+     "rate_low": 0.21,
+     "reason": "라벨 '중립' 비율이 그룹 간 3.8%p 차이"
+    }
+   ],
+   "detail": {
+    "table": {
+     "남성": {
+      "긍정": 416008,
+      "중립": 174843,
+      "부정": 113442
+     },
+     "여성": {
+      "긍정": 1630152,
+      "중립": 549117,
+      "부정": 434250
+     }
+    },
+    "group_field": "^{SpeakerNo}.Gender"
+   },
+   "note": "그룹 기준: ^{SpeakerNo}.Gender",
+   "applicable": true,
+   "applied": true,
+   "verdict": "PASS"
+  },
+  {
+   "qm_id": "Bal-ML-2",
+   "name": "해상도 균형",
+   "characteristic": "균형",
+   "clause": "5259-2 6.5.2.2 표 16",
+   "formula": "X = A/B  (A: 평균 해상도(픽셀 수), B: 각 이미지 해상도와 A의 최대 절대 차이)",
+   "stage": "eval",
+   "threshold": null,
+   "direction": "info",
+   "applied": false,
+   "verdict": "미적용",
+   "note": "audio 데이터에 해당하지 않는 측정값",
+   "A": null,
+   "B": null,
+   "value": null,
+   "defects": [],
+   "detail": {}
+  },
+  {
+   "qm_id": "Div-ML-3",
+   "name": "범주 크기 다양성",
+   "characteristic": "다양성",
+   "clause": "5259-2 6.5.3.2 표 17",
+   "formula": "X = A/B  (A: 항목 수가 기준 미만인 범주 수, B: 전체 범주 수)",
+   "stage": "eval",
+   "threshold": 0.2,
+   "direction": "max",
+   "A": 0,
+   "B": 3,
+   "value": 0.0,
+   "defects": [],
+   "detail": {
+    "counts": {
+     "긍정": 2046160,
+     "중립": 723960,
+     "부정": 547692
+    },
+    "min_count": 10
+   },
+   "note": "범주 최소 항목 수 기준: 10 (품질 요구사항으로 조정)",
+   "applicable": true,
+   "applied": true,
+   "verdict": "PASS"
+  },
+  {
+   "qm_id": "Div-ML-1",
+   "name": "라벨 풍부도",
+   "characteristic": "다양성",
+   "clause": "5259-2 6.5.3.2 표 17",
+   "formula": "X = A/B  (A: 데이터셋의 고유 라벨 수, B: 데이터 항목 수)",
+   "stage": "eval",
+   "threshold": null,
+   "direction": "info",
+   "A": 3,
+   "B": 3317812,
+   "value": 9.042103651442577e-07,
+   "defects": [],
+   "detail": {
+    "counts": {
+     "긍정": 2046160,
+     "중립": 723960,
+     "부정": 547692
+    }
+   },
+   "note": "고유 라벨 3종 / 항목 3,317,812개",
+   "applicable": true,
+   "applied": true,
+   "verdict": "INFO"
+  },
+  {
+   "qm_id": "Idn-ML-1",
+   "name": "식별가능성 비율",
+   "characteristic": "식별가능성",
+   "clause": "5259-2 6.5.5.2 표 19",
+   "formula": "X = A/B  (A: 단독 또는 결합으로 식별에 활용될 수 있는 레코드 수, B: 전체 레코드 수)",
+   "stage": "eval",
+   "threshold": 0.0,
+   "direction": "max",
+   "A": 105,
+   "B": 11023,
+   "value": 0.009525537512473918,
+   "defects": [
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 4명 (< k=5)"
+    },
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 4명 (< k=5)"
+    },
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 4명 (< k=5)"
+    },
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 4명 (< k=5)"
+    },
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 2명 (< k=5)"
+    },
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 2명 (< k=5)"
+    },
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 3명 (< k=5)"
+    },
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 3명 (< k=5)"
+    },
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 3명 (< k=5)"
+    },
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 4명 (< k=5)"
+    },
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 4명 (< k=5)"
+    },
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 4명 (< k=5)"
+    },
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 4명 (< k=5)"
+    },
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 4명 (< k=5)"
+    },
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 4명 (< k=5)"
+    },
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 3명 (< k=5)"
+    },
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 3명 (< k=5)"
+    },
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 3명 (< k=5)"
+    },
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 2명 (< k=5)"
+    },
+    {
+     "type": "준식별자 결합",
+     "kind": "k-익명성 위반",
+     "reason": "동일 조합 2명 (< k=5)"
+    }
+   ],
+   "detail": {
+    "direct": 0,
+    "quasi": 105,
+    "equivalence_classes": 210
+   },
+   "note": "직접식별자 13종 패턴 + 준식별자(Gender, Age, Residence, Occupation) k=5 · 결함 105건 중 상위 20건만 공개",
+   "applicable": true,
+   "applied": true,
+   "verdict": "FAIL"
+  },
+  {
+   "qm_id": "Sim-ML-1",
+   "name": "샘플 유사성",
+   "characteristic": "유사성",
+   "clause": "5259-2 6.5.8.2",
+   "formula": "X = 1 - B/A  (A: 전체 샘플 수, B: 군집 수). 비고 7: 샘플 수 = 군집 수이면 0",
+   "stage": "eval",
+   "threshold": null,
+   "direction": "info",
+   "applied": false,
+   "verdict": "미적용",
+   "note": "audio 데이터에 해당하지 않는 측정값",
+   "A": null,
+   "B": null,
+   "value": null,
+   "defects": [],
+   "detail": {}
+  },
+  {
+   "qm_id": "Sim-ML-3",
+   "name": "샘플 독립성",
+   "characteristic": "유사성",
+   "clause": "5259-2 6.5.8.2",
+   "formula": "X = A/B  (A: 고유값 합의 95%를 설명하는 PCA 주성분 수, B: 데이터셋 전체 차원 수)",
+   "stage": "eval",
+   "threshold": null,
+   "direction": "info",
+   "applied": false,
+   "verdict": "미적용",
+   "note": "audio 데이터에 해당하지 않는 측정값",
+   "A": null,
+   "B": null,
+   "value": null,
+   "defects": [],
+   "detail": {}
+  },
+  {
+   "qm_id": "Con-ML-2",
+   "name": "데이터 라벨 일관성",
+   "characteristic": "일관성",
+   "clause": "5259-2 6.2.3.2 표 3",
+   "formula": "X = A/B  (A: 동일 라벨이 지정된 유사 항목 쌍 수, B: 유사 항목 라벨 비교 총 횟수)",
+   "stage": "eval",
+   "threshold": 0.9,
+   "direction": "min",
+   "A": 61685,
+   "B": 95751,
+   "value": 0.6442230368351244,
+   "defects": [
+    {
+     "key": "그런 느낌이 들 때가 있거든요",
+     "items": 2,
+     "labels": {
+      "긍정": 1,
+      "부정": 1
+     },
+     "samples": "2_1314G2A5_1273G2A4_T1_2D09T0392C000494_004724, 2_1589G2A4_1996G2A5_T1_2D03T0115",
+     "reason": "같은 'Text' 2건에 라벨 2종"
+    },
+    {
+     "key": "그럴 수도 있을 것 같아요",
+     "items": 6,
+     "labels": {
+      "중립": 2,
+      "긍정": 3,
+      "부정": 1
+     },
+     "samples": "2_1323G2A4_1322G2A5_T1_2D11T0478C000204_004811, 2_1698G2A3_1272G2A3_T1_2D05T0182",
+     "reason": "같은 'Text' 6건에 라벨 3종"
+    },
+    {
+     "key": "얘기를 해보려고 합니다",
+     "items": 2,
+     "labels": {
+      "부정": 1,
+      "긍정": 1
+     },
+     "samples": "2_1323G2A4_1322G2A5_T1_2D11T0478C000339_004809, 2_0832G1A2_0833G2A2_T2_2D06T0269",
+     "reason": "같은 'Text' 2건에 라벨 2종"
+    },
+    {
+     "key": "그리고 결혼을 하게 되면",
+     "items": 2,
+     "labels": {
+      "긍정": 1,
+      "부정": 1
+     },
+     "samples": "2_1331G2A3_1329G2A3_T1_2D10T0438C000420_005305, 2_1857G2A2_1859G2A2_T1_2D10T0438",
+     "reason": "같은 'Text' 2건에 라벨 2종"
+    },
+    {
+     "key": "뭐 맘에 안드는 게 있어도",
+     "items": 2,
+     "labels": {
+      "긍정": 1,
+      "부정": 1
+     },
+     "samples": "2_1348G2A5_1349G2A5_T1_2D05T0181C000339_004899, 2_1429G2A5_1401G2A4_T1_2D11T0482",
+     "reason": "같은 'Text' 2건에 라벨 2종"
+    },
+    {
+     "key": "조금만 크게 말씀해 주시겠어요",
+     "items": 2,
+     "labels": {
+      "부정": 1,
+      "중립": 1
+     },
+     "samples": "2_1379G2A5_1275G2A4_T1_2D11T0472C000488_005062, 2_4437G1A4_4438G2A4_T2_2D09T0398",
+     "reason": "같은 'Text' 2건에 라벨 2종"
+    },
+    {
+     "key": "아니 안 먹었던 거 같은데",
+     "items": 2,
+     "labels": {
+      "중립": 1,
+      "부정": 1
+     },
+     "samples": "2_1380G1A5_1381G2A5_T1_2D09T0401C000368_005029, 2_6014G2A2_6016G2A5_T1_2D06T0237",
+     "reason": "같은 'Text' 2건에 라벨 2종"
+    },
+    {
+     "key": "안녕하세요 반갑습니다",
+     "items": 387,
+     "labels": {
+      "긍정": 303,
+      "부정": 41,
+      "중립": 43
+     },
+     "samples": "2_1382G2A5_1396G2A5_T1_2D06T0233C000134_005168, 2_1382G2A5_1396G2A5_T1_2D08T0341",
+     "reason": "같은 'Text' 387건에 라벨 3종"
+    },
+    {
+     "key": "소화가 안되거나 할 때는",
+     "items": 2,
+     "labels": {
+      "긍정": 1,
+      "부정": 1
+     },
+     "samples": "2_1387G2A5_1388G2A5_T1_2D08T0362C000169_005124",
+     "reason": "같은 'Text' 2건에 라벨 2종"
+    },
+    {
+     "key": "내과에 가서 위내시경을 하거든요",
+     "items": 2,
+     "labels": {
+      "긍정": 1,
+      "부정": 1
+     },
+     "samples": "2_1387G2A5_1388G2A5_T1_2D08T0362C000169_005124",
+     "reason": "같은 'Text' 2건에 라벨 2종"
+    },
+    {
+     "key": "위내시경을 하자고 하시더라구요",
+     "items": 2,
+     "labels": {
+      "긍정": 1,
+      "부정": 1
+     },
+     "samples": "2_1387G2A5_1388G2A5_T1_2D08T0362C000169_005124",
+     "reason": "같은 'Text' 2건에 라벨 2종"
+    },
+    {
+     "key": "한 일주일에서 이 주일 정도요",
+     "items": 2,
+     "labels": {
+      "긍정": 1,
+      "부정": 1
+     },
+     "samples": "2_1387G2A5_1388G2A5_T1_2D08T0362C000169_005124",
+     "reason": "같은 'Text' 2건에 라벨 2종"
+    },
+    {
+     "key": "네 저는 그렇게 심한 편이 아니어서요",
+     "items": 2,
+     "labels": {
+      "긍정": 1,
+      "부정": 1
+     },
+     "samples": "2_1387G2A5_1388G2A5_T1_2D08T0362C000169_005124",
+     "reason": "같은 'Text' 2건에 라벨 2종"
+    },
+    {
+     "key": "감기나 이런 거 땜에 가는데",
+     "items": 2,
+     "labels": {
+      "긍정": 1,
+      "부정": 1
+     },
+     "samples": "2_1387G2A5_1388G2A5_T1_2D08T0362C000169_005124",
+     "reason": "같은 'Text' 2건에 라벨 2종"
+    },
+    {
+     "key": "내과도 많이 구별되어 있잖아",
+     "items": 2,
+     "labels": {
+      "긍정": 1,
+      "부정": 1
+     },
+     "samples": "2_1387G2A5_1388G2A5_T1_2D08T0362C000169_005124",
+     "reason": "같은 'Text' 2건에 라벨 2종"
+    },
+    {
+     "key": "호흡기 내과도 있고 종류가 많더라구요",
+     "items": 2,
+     "labels": {
+      "긍정": 1,
+      "부정": 1
+     },
+     "samples": "2_1387G2A5_1388G2A5_T1_2D08T0362C000169_005124",
+     "reason": "같은 'Text' 2건에 라벨 2종"
+    },
+    {
+     "key": "요즘 모든 만병의 근원은",
+     "items": 2,
+     "labels": {
+      "긍정": 1,
+      "부정": 1
+     },
+     "samples": "2_1387G2A5_1388G2A5_T1_2D08T0362C000169_005124",
+     "reason": "같은 'Text' 2건에 라벨 2종"
+    },
+    {
+     "key": "남편 때문에 받기도 하고",
+     "items": 2,
+     "labels": {
+      "긍정": 1,
+      "부정": 1
+     },
+     "samples": "2_1387G2A5_1388G2A5_T1_2D08T0362C000169_005124",
+     "reason": "같은 'Text' 2건에 라벨 2종"
+    },
+    {
+     "key": "네 그렇더라고요 그래서",
+     "items": 4,
+     "labels": {
+      "부정": 1,
+      "긍정": 2,
+      "중립": 1
+     },
+     "samples": "2_1388G2A5_1387G2A5_T1_2D08T0373C000164_024694, 2_1388G2A5_1387G2A5_T1_2D10T0429",
+     "reason": "같은 'Text' 4건에 라벨 3종"
+    },
+    {
+     "key": "네 안녕하세요 반갑습니다",
+     "items": 113,
+     "labels": {
+      "긍정": 94,
+      "중립": 16,
+      "부정": 3
+     },
+     "samples": "2_1388G2A5_1387G2A5_T1_2D10T0429C000197_024693, 2_1410G2A5_1409G2A5_T1_2D09T0417",
+     "reason": "같은 'Text' 113건에 라벨 3종"
+    }
+   ],
+   "detail": {},
+   "note": "유사 기준: 'Text' 값이 같은 항목 (공백 제외 10자 이상) · 결함 474건 중 상위 20건만 공개",
+   "applicable": true,
+   "applied": true,
+   "verdict": "FAIL"
+  }
+ ],
+ "summary": {
+  "gate_passed": true,
+  "eval_judged": 6,
+  "eval_passed": 4,
+  "eval_score": 66.67
+ }
+}

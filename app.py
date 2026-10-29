@@ -1,5 +1,8 @@
 """DQ-5259 화면 (SRS 6장). 실행: streamlit run app.py"""
 
+import json
+import subprocess
+import sys
 from pathlib import Path
 
 import pandas as pd
@@ -12,6 +15,18 @@ from dq5259.measures import REGISTRY
 
 ROOT = Path(__file__).resolve().parent
 RUNS = ROOT / "runs" / "app"
+RESULTS = ROOT / "results"   # 공개용 실데이터 진단 결과 (tools/export_results.py)
+
+
+@st.cache_resource
+def ensure_synthetic():
+    """배포 환경처럼 samples/가 없으면 결함 주입 합성 데이터를 만든다."""
+    if not (ROOT / "samples" / "robot").exists():
+        subprocess.run([sys.executable, str(ROOT / "tools" / "make_synthetic.py")], check=True, capture_output=True)
+    return True
+
+
+ensure_synthetic()
 
 st.set_page_config(page_title="DQ-5259 데이터 품질 평가", page_icon="📊", layout="wide")
 st.markdown(f"""<style>{ui.CSS}
@@ -31,14 +46,31 @@ html(ui.hero("DQ-5259 · AI 학습데이터 품질 평가",
              "번역하며 익힌 ISO/IEC 5259를 학습데이터에 직접 적용해, ML 전용 품질 특성을 측정하고 판정합니다.",
              ["ISO/IEC 5259-2 측정값", "ISO/IEC 5259-3 6.3.9 확인 검토", "균형 · 다양성 · 식별가능성 · 유사성"]))
 
-tab_ds, tab_cfg, tab_res, tab_def, tab_rep = st.tabs(["① 데이터셋", "② 측정 설정", "③ 결과", "④ 결함 상세", "⑤ 보고서"])
+tab_real, tab_ds, tab_cfg, tab_res, tab_def, tab_rep = st.tabs(
+    ["★ 실데이터 결과", "① 데이터셋", "② 측정 설정", "③ 결과", "④ 결함 상세", "⑤ 보고서"])
+
+# ---------------- ★ 실데이터 결과 ----------------
+with tab_real:
+    files = sorted(RESULTS.glob("*.json")) if RESULTS.exists() else []
+    if not files:
+        st.info("공개된 실데이터 결과가 없습니다.")
+    else:
+        html(ui.section("AI Hub 공개 데이터 적용 결과",
+                        "원본은 재배포 금지라 포함하지 않고 집계 결과만 공개 · 직접 실행은 ① 데이터셋 탭(합성 데이터)"))
+        saved = {f.stem: json.loads(f.read_text(encoding="utf-8")) for f in files}
+        pick = st.radio("데이터셋", list(saved), horizontal=True, format_func=lambda k: saved[k]["dataset"]["name"],
+                        label_visibility="collapsed")
+        st.iframe(report.html_report(saved[pick]), height=1400)  # 보고서 값은 html.escape 처리됨
+
 
 # ---------------- ① 데이터셋 ----------------
 with tab_ds:
     html(ui.section("데이터셋 지정", "라벨·원천 폴더와 라벨 구조 설정"))
     with st.container(border=True):
         c0, c00 = st.columns([2, 1])
-        presets = sorted((ROOT / "configs").glob("*.yaml"))
+        # 데이터 폴더가 있는 설정만 보여준다 (배포 환경에는 AI Hub 원본이 없음)
+        presets = [p for p in sorted((ROOT / "configs").glob("*.yaml"))
+                   if Path(config.load(p)["dataset"]["root"]).is_dir()]
         default = next((i for i, p in enumerate(presets) if p.stem == "synthetic_robot"), 0)
         choice = c0.selectbox("설정 불러오기", presets, index=default, format_func=lambda p: p.name)
         uploaded = c00.file_uploader("또는 설정 YAML 업로드", type=["yaml", "yml"])
