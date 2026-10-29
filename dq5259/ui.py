@@ -167,3 +167,55 @@ def style_fig(fig):
     fig.update_xaxes(showgrid=False)
     fig.update_yaxes(gridcolor="#eef1f4", showgrid=True)
     return fig
+
+
+LOGO_SVG = """<svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="1" y="1" width="36" height="36" rx="10" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.35)"/>
+<rect x="9" y="20" width="4" height="9" rx="2" fill="#a9c4e6"/><rect x="16" y="14" width="4" height="15" rx="2" fill="#d6e4f5"/>
+<rect x="23" y="9" width="4" height="20" rx="2" fill="#ffffff"/>
+<path d="M8 12.5l3 3 5-6" stroke="#7fd1a8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>"""
+
+PRODUCT_CSS = """
+.pq{background:linear-gradient(125deg,#0b2e59 0%%,#163d6e 55%%,#24507f 100%%);color:#fff;border-radius:16px;
+  padding:22px 30px 26px;margin-bottom:20px;position:relative;overflow:hidden}
+.pq:before{content:"";position:absolute;right:-80px;top:-90px;width:320px;height:320px;border-radius:50%%;
+  background:radial-gradient(circle,rgba(255,255,255,.10),rgba(255,255,255,0) 70%%)}
+.pq:after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:28px 28px;pointer-events:none}
+.pq-bar{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+.pq-brand{display:flex;align-items:center;gap:11px}
+.pq-name{font-size:19px;font-weight:800;letter-spacing:.3px;line-height:1.1}
+.pq-name small{display:block;font-size:10.5px;font-weight:500;letter-spacing:1.6px;opacity:.65;margin-top:3px}
+.pq-ver{font-size:11px;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:2px 9px;margin-left:6px;opacity:.85}
+.pq-std{font-size:11.5px;background:rgba(127,209,168,.16);color:#bfe9d3;border:1px solid rgba(127,209,168,.4);
+  border-radius:999px;padding:4px 12px;font-weight:600}
+.pq-main{position:relative;z-index:1;margin-top:22px;display:grid;grid-template-columns:1.25fr 1fr;gap:28px;align-items:end}
+.pq-main h1{font-size:30px;line-height:1.28;margin:0;font-weight:800;letter-spacing:-.6px;color:#fff;border:0;padding:0}
+.pq-main h1 em{font-style:normal;color:#a9c4e6}
+.pq-main p{margin:10px 0 0;font-size:14px;line-height:1.6;opacity:.82}
+.pq-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.pq-stat{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:11px 14px}
+.pq-stat b{display:block;font-size:21px;font-weight:800;letter-spacing:-.4px}
+.pq-stat span{font-size:11.5px;opacity:.72}
+.pq-feats{position:relative;z-index:1;display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.pq-feat{font-size:12px;padding:5px 12px;border-radius:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16)}
+.pq-feat i{font-style:normal;color:#7fd1a8;margin-right:5px}
+@media (max-width:900px){.pq-main{grid-template-columns:1fr}.pq-main h1{font-size:24px}}
+""" % ()
+
+
+def product_hero(version):
+    feats = ["균형", "다양성", "식별가능성", "라벨 일관성", "유사성", "완전성"]
+    stats = [("14", "ISO/IEC 5259-2 측정값"), ("6.3.9", "5259-3 확인 검토 절차"),
+             ("16,000", "장 실데이터 검증 (이미지)"), ("332만", "건 실데이터 검증 (발화)")]
+    return (f'<div class="pq"><div class="pq-bar"><div class="pq-brand">{LOGO_SVG}'
+            f'<div class="pq-name">DQ-5259<small>AI DATA QUALITY EVALUATOR</small></div>'
+            f'<span class="pq-ver">v{esc(version)}</span></div>'
+            f'<span class="pq-std">ISO/IEC 5259 기반</span></div>'
+            f'<div class="pq-main"><div><h1>AI 학습데이터,<br><em>표준으로 진단</em>합니다</h1>'
+            f'<p>균형·식별가능성·라벨 일관성을 표준 측정값으로 정량 평가하고, '
+            f'기준값 판정부터 시험성적서 형식 보고서까지 한 번에 생성합니다.</p></div>'
+            f'<div class="pq-stats">' + "".join(f'<div class="pq-stat"><b>{esc(n)}</b><span>{esc(t)}</span></div>'
+                                                for n, t in stats) + '</div></div>'
+            f'<div class="pq-feats">' + "".join(f'<span class="pq-feat"><i>●</i>{esc(f)}</span>' for f in feats)
+            + '</div></div>')

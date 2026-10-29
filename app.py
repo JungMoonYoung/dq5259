@@ -10,7 +10,7 @@ import plotly.express as px
 import streamlit as st
 import yaml
 
-from dq5259 import config, report, runner, ui
+from dq5259 import __version__, config, report, runner, ui
 from dq5259.measures import REGISTRY
 
 ROOT = Path(__file__).resolve().parent
@@ -29,8 +29,8 @@ def ensure_synthetic():
 ensure_synthetic()
 
 st.set_page_config(page_title="DQ-5259 데이터 품질 평가", page_icon="📊", layout="wide")
-st.markdown(f"""<style>{ui.CSS}
-.block-container{{padding-top:1.6rem;max-width:1240px}}
+st.markdown(f"""<style>{ui.CSS}{ui.PRODUCT_CSS}
+.block-container{{padding-top:3.2rem;max-width:1240px}}
 [data-testid="stTabs"] button[role="tab"]{{font-size:15px;padding:10px 18px}}
 [data-testid="stTabs"] button[aria-selected="true"]{{color:{ui.COLORS['navy']};font-weight:700}}
 div[data-testid="stVerticalBlockBorderWrapper"]{{background:#fff;border-radius:12px}}
@@ -42,9 +42,7 @@ def html(s):
     st.markdown(f'<div class="dq">{s}</div>', unsafe_allow_html=True)
 
 
-html(ui.hero("DQ-5259 · AI 학습데이터 품질 평가",
-             "번역하며 익힌 ISO/IEC 5259를 학습데이터에 직접 적용해, ML 전용 품질 특성을 측정하고 판정합니다.",
-             ["ISO/IEC 5259-2 측정값", "ISO/IEC 5259-3 6.3.9 확인 검토", "균형 · 다양성 · 식별가능성 · 유사성"]))
+html(ui.product_hero(__version__))
 
 tab_real, tab_ds, tab_cfg, tab_res, tab_def, tab_rep = st.tabs(
     ["★ 실데이터 결과", "① 데이터셋", "② 측정 설정", "③ 결과", "④ 결함 상세", "⑤ 보고서"])
