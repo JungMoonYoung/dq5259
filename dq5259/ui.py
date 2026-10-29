@@ -75,6 +75,8 @@ def fmt(v, digits=4):
             return "∞"
         if v.is_integer():
             return str(int(v))
+        if 0 < abs(v) < 10 ** -digits:  # 라벨 풍부도처럼 아주 작은 비율은 지수로
+            return f"{v:.1e}"
         return f"{v:.{digits}f}"
     return str(v)
 
@@ -164,6 +166,8 @@ def style_fig(fig):
                       title_font_color=COLORS["navy"], title_font_size=15,
                       margin=dict(l=10, r=10, t=48, b=10), height=330,
                       legend=dict(orientation="h", y=1.08, x=1, xanchor="right"))
+    for i, trace in enumerate(fig.data):  # px가 지정한 기본색을 네이비 계열로 덮어쓴다
+        trace.update(marker_color=PLOT_COLORS[i % len(PLOT_COLORS)])
     fig.update_xaxes(showgrid=False)
     fig.update_yaxes(gridcolor="#eef1f4", showgrid=True)
     return fig
