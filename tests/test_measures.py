@@ -11,6 +11,7 @@ from PIL import Image
 
 from dq5259 import config, runner
 from dq5259.measures.balance import inverse_max_deviation, js_divergence
+from dq5259.measures.similarity import pca_components
 
 ROOT = Path(__file__).resolve().parent.parent
 SAMPLES = ROOT / "samples"
@@ -41,6 +42,15 @@ def test_js_divergence():
     assert js_divergence([1.0, 0.0], [0.0, 1.0]) == pytest.approx(1.0)  # 밑 2 → 최대 1
 
 
+def test_pca_components():
+    # 모든 샘플이 한 방향(1차원)에만 퍼져 있으면 주성분 1개로 설명된다
+    line = [[t, 2 * t, 3 * t, 4 * t] for t in range(1, 8)]
+    assert pca_components(line) == 1
+    # 서로 직교하는 4개 방향에 고르게 퍼져 있으면 정규화 후에도 여러 성분이 필요하다
+    spread = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1], [-1, 0, 0, 0], [0, -1, 0, 0]]
+    assert pca_components(spread) >= 3
+
+
 # ---------- AT-01 결함 주입 데이터: 심은 결함 수와 측정 결과 일치 ----------
 
 def test_at01_robot():
@@ -61,6 +71,14 @@ def test_at01_robot():
     assert r["Bal-ML-7"]["defects"][0]["label"] == "pedestrian"
     # 완전 복사 이미지 2쌍이 유사 군집으로 묶임
     assert sum(1 for d in r["Sim-ML-1"]["defects"] if d["size"] >= 2) >= 2
+    # 2차: 해상도 분포, 라벨 풍부도, 유사 이미지 라벨 불일치
+    assert r["Bal-ML-2"]["detail"]["resolutions"] == exp["resolutions"]
+    counts = exp["class_counts"]
+    assert r["Div-ML-1"]["value"] == pytest.approx(len(counts) / sum(counts.values()))
+    flagged = {(d["sample_a"], d["sample_b"]) for d in r["Con-ML-2"]["defects"]}
+    for a, b in exp["con_ml_2_inconsistent_pairs"]:
+        assert (a, b) in flagged or (b, a) in flagged
+    assert 0 < r["Sim-ML-3"]["A"] <= r["Sim-ML-3"]["detail"]["rank_cap"]
 
 
 def test_at01_emotion():
@@ -75,6 +93,8 @@ def test_at01_emotion():
     f_rate = eg["여성"]["슬픔"] / sum(eg["여성"].values())
     m_rate = eg["남성"]["슬픔"] / sum(eg["남성"].values())
     assert r["Bal-ML-7"]["value"] == pytest.approx(f_rate - m_rate)
+    # 같은 문장 발화의 감정 라벨 일관성: 일치 쌍 2 / 비교 쌍 4
+    assert (r["Con-ML-2"]["A"], r["Con-ML-2"]["B"]) == (exp["con_ml_2"]["A"], exp["con_ml_2"]["B"])
 
 
 # ---------- AT-02 경계값 ----------

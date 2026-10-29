@@ -49,4 +49,4 @@ def ratio(a, b):
 
 
 # 등록을 위해 모듈을 불러온다
-from . import gate, balance, diversity, identifiability, similarity  # noqa: E402,F401
+from . import gate, balance, diversity, identifiability, similarity, consistency  # noqa: E402,F401

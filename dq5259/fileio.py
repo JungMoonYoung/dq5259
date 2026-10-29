@@ -50,7 +50,7 @@ def dhash(img, size=8):
 
 
 def image_meta(path):
-    """실제 해상도·평균 밝기·dHash. 실패 시 (None, 사유)."""
+    """실제 해상도·평균 밝기·dHash·8x8 썸네일(PCA 특징). 실패 시 (None, 사유)."""
     try:
         with Image.open(path) as img:
             img.load()
@@ -59,8 +59,9 @@ def image_meta(path):
             gray.thumbnail((128, 128))
             px = list(gray.tobytes())
             brightness = sum(px) / len(px)
-            return {"width": width, "height": height,
-                    "brightness": brightness, "dhash": dhash(img)}, None
+            thumb = list(img.convert("L").resize((8, 8), Image.Resampling.BILINEAR).tobytes())
+            return {"width": width, "height": height, "brightness": brightness,
+                    "dhash": dhash(img), "thumb": thumb}, None
     except Exception as e:  # 손상 이미지는 종류가 다양해 한 번에 받는다
         return None, f"이미지 읽기 실패 ({type(e).__name__})"
 

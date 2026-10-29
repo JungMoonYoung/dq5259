@@ -139,3 +139,19 @@ def label_ratio_balance(prof, cfg, params):
                               "reason": f"라벨 '{L}' 비율이 그룹 간 {gap:.1%}p 차이"}],
                     detail={"table": {g: dict(table[g]) for g in groups}, "group_field": f["unit_group"]},
                     note=f"그룹 기준: {f['unit_group']}")
+
+
+@register("Bal-ML-2", "해상도 균형", "균형", CLAUSE,
+          "X = A/B  (A: 평균 해상도(픽셀 수), B: 각 이미지 해상도와 A의 최대 절대 차이)", data_types=("image",))
+def resolution_balance(prof, cfg, params):
+    items = [(s.key, s.source_meta["width"], s.source_meta["height"]) for s in prof.samples
+             if s.source_meta and "width" in s.source_meta]
+    if len(items) < 2:
+        return not_applicable("Bal-ML-2", "해상도를 읽을 수 있는 이미지가 2장 미만")
+    A, B, X = inverse_max_deviation([w * h for _, w, h in items])
+    sizes = Counter(f"{w}×{h}" for _, w, h in items)
+    far = max(items, key=lambda it: abs(it[1] * it[2] - A))
+    defects = [] if B == 0 else [{"sample": far[0], "resolution": f"{far[1]}×{far[2]}",
+                                  "reason": f"평균 {A:,.0f}px에서 가장 먼 해상도"}]
+    return QMResult("Bal-ML-2", A, B, X, defects, detail={"resolutions": dict(sizes.most_common())},
+                    note="해상도 종류: " + ", ".join(f"{k} {v}장" for k, v in sizes.most_common(4)))

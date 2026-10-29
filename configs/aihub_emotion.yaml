@@ -16,6 +16,7 @@ fields:
     - Conversation[].SpeakerEmotionCategory
   unit_items: Conversation[]
   unit_label: SpeakerEmotionCategory
+  similar_key: Text                # Con-ML-2: 같은 문장 발화끼리 감정 라벨 일관성 비교
   unit_group: ^{SpeakerNo}.Gender
   person_items: [Speaker1, Speaker2]
   quasi_identifiers: [Gender, Age, Residence, Occupation]
