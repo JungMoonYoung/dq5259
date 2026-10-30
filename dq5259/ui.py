@@ -6,6 +6,8 @@
 import html
 import math
 
+from . import PRODUCT_NAME
+
 COLORS = {
     "navy": "#0b2e59", "navy2": "#1d4673", "accent": "#3b6ea5",
     "bg": "#f4f6f9", "card": "#ffffff", "line": "#dde3ea", "text": "#1f2933", "muted": "#6b7785",
@@ -214,9 +216,9 @@ def product_hero(version):
     stats = [("14개", "구현 측정값 · ISO/IEC 5259-2"), ("6.3.9", "준수 절차 · ISO/IEC 5259-3"),
              ("16,000장", "검증 데이터 · AI Hub 이미지"), ("332만 건", "검증 데이터 · AI Hub 발화")]
     return (f'<div class="pq"><div class="pq-bar"><div class="pq-brand">{LOGO_SVG}'
-            f'<div class="pq-name">DQ-5259<small>AI DATA QUALITY EVALUATOR</small></div>'
+            f'<div class="pq-name">{esc(PRODUCT_NAME)}<small>AI DATA QUALITY EVALUATOR</small></div>'
             f'<span class="pq-ver">v{esc(version)}</span></div>'
-            f'<span class="pq-std">ISO/IEC 5259 기반</span></div>'
+            f'<span class="pq-std">ISO/IEC 5259-2·3 기반</span></div>'
             f'<div class="pq-main"><div><h1>AI 학습데이터,<br><em>표준으로 진단</em>합니다</h1>'
             f'<p>표준 기반 학습 데이터 진단 프로그램</p></div>'
             f'<div class="pq-stats">' + "".join(f'<div class="pq-stat"><b>{esc(n)}</b><span>{esc(t)}</span></div>'

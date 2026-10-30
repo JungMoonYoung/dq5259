@@ -1,4 +1,4 @@
-"""DQ-5259 화면 (SRS 6장). 실행: streamlit run app.py"""
+"""데이터품질검증-ISO/IEC 5259 화면 (SRS 6장). 실행: streamlit run app.py"""
 
 import json
 import subprocess
@@ -10,7 +10,7 @@ import plotly.express as px
 import streamlit as st
 import yaml
 
-from dq5259 import __version__, config, report, runner, ui
+from dq5259 import PRODUCT_NAME, __version__, config, report, runner, ui
 from dq5259.measures import REGISTRY
 
 ROOT = Path(__file__).resolve().parent
@@ -28,7 +28,7 @@ def ensure_synthetic():
 
 ensure_synthetic()
 
-st.set_page_config(page_title="DQ-5259 데이터 품질 평가", page_icon="📊", layout="wide")
+st.set_page_config(page_title=PRODUCT_NAME, page_icon="📊", layout="wide")
 st.markdown(f"""<style>{ui.CSS}{ui.PRODUCT_CSS}
 .block-container{{padding-top:3.2rem;max-width:1240px}}
 [data-testid="stTabs"] button[role="tab"]{{font-size:15px;padding:10px 18px}}

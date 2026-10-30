@@ -13,7 +13,7 @@ from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
 
-from . import __version__, profile
+from . import PRODUCT_NAME, __version__, profile
 from .measures import REGISTRY
 
 
@@ -65,7 +65,7 @@ def run(cfg, progress=None):
     judged = [r for r in rows if r["stage"] == "eval" and r["verdict"] in ("PASS", "FAIL")]
     passed = sum(r["verdict"] == "PASS" for r in judged)
     return {
-        "tool": f"DQ-5259 {__version__}",
+        "tool": f"{PRODUCT_NAME} {__version__}",
         "run_at": datetime.now().isoformat(timespec="seconds"),
         "dataset": cfg["dataset"],
         "config": cfg,
