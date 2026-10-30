@@ -1,10 +1,10 @@
 """진단 실행 파이프라인.
 
-5259-3 6.3.9 절차와의 대응
-  측정값 식별      → select()     : 데이터 유형에 맞는 QM 추천 + 설정의 enabled
-  기준값 문서화    → cfg.measures : threshold/direction (YAML로 저장)
-  측정             → run()        : 각 QM 함수 실행
-  검토 기록 유지   → save_run()   : 설정·결과를 JSON으로 보관
+5259-3 조항과의 대응
+  측정값 식별 (6.3.10 c)          → select()     : 데이터 유형에 맞는 QM 추천 + 설정의 enabled
+  기준값 문서화 (6.3.10 b)        → cfg.measures : threshold/direction (YAML로 저장)
+  측정값으로 품질 확인 (6.3.9)    → run()        : 각 QM 함수 실행·판정
+  측정값·기준값 기록 (6.4 d, e)   → save_run()   : 설정·결과를 JSON으로 보관
 """
 
 import json

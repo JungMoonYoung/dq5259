@@ -104,7 +104,7 @@ def result_view(res, key):
             if advice and pick["verdict"] == "FAIL":
                 html(ui.banner(f"조치 권고 — {advice}", "INFO"))
 
-    html(ui.section("평가 보고서", "시험성적서 형식 · ISO/IEC 5259-3 6.3.9 검토 기록"))
+    html(ui.section("평가 보고서", "시험성적서 형식 · ISO/IEC 5259-3 6.4 작업 산출물"))
     c1, c2, _ = st.columns([1, 1, 2])
     c1.download_button("보고서 내려받기 (HTML)", report.html_report(res), file_name=f"dq5259_{key}_report.html",
                        mime="text/html", type="primary", key=f"{key}_rep")
@@ -181,7 +181,7 @@ with tab_ds:
 
 # ---------------- ② 측정 설정 ----------------
 with tab_cfg:
-    html(ui.section("측정값 식별 · 기준값 문서화", "ISO/IEC 5259-3 6.3.9 — 적용하지 않는 측정값은 사유를 남깁니다"))
+    html(ui.section("측정값 식별 · 기준값 문서화", "ISO/IEC 5259-3 6.3.10 — 적용하지 않는 측정값은 사유를 남깁니다"))
     for stage, label in (("gate", "사전 점검 · 일반 데이터 품질"), ("eval", "본 평가 · ML 전용 데이터 품질")):
         st.markdown(f"**{label}**")
         for qm_id, applied, reason in runner.select(cfg):
@@ -223,7 +223,7 @@ with tab_res:
         result_view(res, "run")
         runs = runner.load_runs(RUNS) if RUNS.exists() else []
         if runs:
-            with st.expander(f"실행 이력 {len(runs)}건 — ISO/IEC 5259-3 6.3.9 검토 기록 유지"):
+            with st.expander(f"실행 이력 {len(runs)}건 — ISO/IEC 5259-3 6.4 측정값·기준값 기록"):
                 st.dataframe(pd.DataFrame([{
                     "실행": r["run_at"], "데이터셋": r["dataset"]["name"], "샘플": r["profile"]["samples"],
                     "사전 점검": "통과" if r["summary"]["gate_passed"] else "미통과",
